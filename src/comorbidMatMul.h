@@ -7,23 +7,13 @@
 
 using namespace Rcpp;
 
-// # nocov start
 #ifdef ICD_DEBUG
-void printCornerMap(DenseMap x);
-void printCornerSparse(PtsSparse x);
-#define PRINTCORNERMAP(x)    \
-  Rcpp::Rcout << #x << ": "; \
-  printCornerMap(x);
-#define PRINTCORNERSP(x)     \
-  Rcpp::Rcout << #x << ": "; \
-  printCornerSparse(x);
-#define ICD_ASSIGN(row, col) mat(row, col) = true; // bounds check
-#else
-#define PRINTCORNERMAP(x) ((void)0);
-#define PRINTCORNERSP(x) ((void)0);
+#define ICD_ASSIGN(row, col) mat.insert(row, col) = true; // bounds check
+#else // !ICD_DEBUG
 #define ICD_ASSIGN(row, col) mat.coeffRef(row, col) = true;
 #endif
-// # nocov end
+#define PRINTCORNERMAP(x) ((void)0);
+#define PRINTCORNERSP(x) ((void)0);
 
 void buildVisitCodesSparseWide(
   const DataFrame &data,

@@ -35,7 +35,7 @@ MapPlus::MapPlus(const List &mapList, const Relevant &r) {
     map[cmb_name] = this_cmb;
   } // for
   DEBUG("Map reduced. Initializing the Eigen matrix");
-  mat = DenseMap(r.keys.size(), mapList.size());
+  mat = SparseMap(r.keys.size(), mapList.size());
   mat.setZero();
   DEBUG("mat rows: " << mat.rows() << ", cols: " << mat.cols());
   buildMatrix();

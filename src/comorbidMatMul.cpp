@@ -1,8 +1,7 @@
 // [[Rcpp::depends(RcppEigen)]]
+#include "local.h"
 #include "comorbidMatMul.h"
 #include "fastIntToString.h"
-#include "icd_types.h"
-#include "local.h"
 #include "mapplus.h"
 #include "refactor.h"
 #include "relevant.h"
@@ -22,36 +21,6 @@
  */
 
 using namespace Rcpp;
-
-// # nocov start
-#ifdef ICD_DEBUG
-void printCornerMap(DenseMap x) {
-  DEBUG("Map matrix:");
-  if (x.rows() >= 8 && x.cols() >= 32) {
-    DenseMap block = x.block<8, 32>(0, 0);
-    DEBUG(block);
-  } else if (x.rows() < 5 && x.cols() < 32) {
-    DEBUG(x);
-  } else if (x.rows() > 1 && x.cols() > 1) {
-    DEBUG(x(0, 0) << ", " << x(0, 1) << ", " << x(1, 0) << ", " << x(1, 1));
-  } else if (x.rows() == 1 && x.cols() == 1) {
-    DEBUG(x(0, 0));
-  } else {
-    DEBUG("map mat empty");
-  }
-  DEBUG("Map matrix rows: " << x.rows() << ", and cols: " << x.cols());
-}
-
-void printCornerSparse(PtsSparse x) {
-  DEBUG("converting visMat to dense for debugging only:");
-  Eigen::MatrixXi dense = Eigen::MatrixXi(x);
-  if (x.rows() >= 4 && x.cols() >= 4)
-    Rcout << dense.block<4, 4>(0, 0) << std::endl;
-  else
-    Rcout << dense << std::endl;
-}
-#endif
-// # nocov end
 
 void buildVisitCodesSparseWide(
   const DataFrame &data,

@@ -10,7 +10,7 @@ public:
   MapPlus(const List &icd9Mapping, const Relevant &rh);
   void buildMatrix();
   List map; // consider ListOf<IntegerVector>
-  DenseMap mat;
+  SparseMap mat;
   R_xlen_t rows() { return mat.rows(); }
 };
 

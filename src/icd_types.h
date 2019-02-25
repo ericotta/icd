@@ -36,6 +36,7 @@ typedef int SparseValue;
 typedef Eigen::Triplet<SparseValue> Triplet;
 typedef Eigen::SparseMatrix<SparseValue, Eigen::RowMajor> PtsSparse;
 typedef Eigen::MatrixXi DenseMap;
+typedef Eigen::SparseMatrix<SparseValue> SparseMap;
 typedef std::pair<std::string, VecInt::size_type> VisLkPair;
 typedef Rcpp::sugar::IndexHash<STRSXP> IHS;
 
