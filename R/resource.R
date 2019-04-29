@@ -481,14 +481,16 @@ get_icd_data_dir <- function(must_work = TRUE) {
 #' @keywords internal
 #' @noRd
 .exists <- function(var_name) {
-  exists(x = var_name, envir = .icd_data_env)
+  vapply(var_name, exists, envir = .icd_data_env, logical(1))
 }
 
 .get <- function(var_name) {
+  stopifnot(length(var_name) == 1)
   get(x = var_name, envir = .icd_data_env)
 }
 
 .assign <- function(var_name, value) {
+  stopifnot(length(var_name) == 1)
   assign(
     x = var_name,
     value = value,
@@ -533,7 +535,6 @@ get_icd_data_dir <- function(must_work = TRUE) {
     stop("neither or both directories exist")
   }
 }
-
 
 .get_lazy <- function(var_name) {
   stopifnot(length(var_name) == 1)
