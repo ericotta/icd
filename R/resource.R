@@ -117,7 +117,7 @@
 
 .all_cached <- function() {
   if (is.null(.get_opt("resource"))) return(FALSE)
-  vec <- vapply(.data_names, .exists_in_cache, logical(1))
+  vec <- vapply(.data_names_cache, .exists_in_cache, logical(1))
   res <- all(vec)
   if (!res)
     .dbg("missing data is: ", paste(.data_names[!vec], collapse = ", "))
