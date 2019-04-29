@@ -536,6 +536,7 @@ get_icd_data_dir <- function(must_work = TRUE) {
 
 
 .get_lazy <- function(var_name) {
+  stopifnot(length(var_name) == 1)
   ns <- asNamespace("icd")
   lz <- ns$.__NAMESPACE__.$lazydata
   get(var_name, lz)
@@ -544,7 +545,10 @@ get_icd_data_dir <- function(must_work = TRUE) {
 .exists_in_lazy <- function(var_name) {
   ns <- asNamespace("icd")
   lz <- ns$.__NAMESPACE__.$lazydata
-  exists(var_name, lz)
+  vapply(var_name,
+         exists,
+         FUN.VALUE = logical(1),
+         lz)
 }
 
 .get_anywhere <- function(var_name, fetch = FALSE) {
@@ -570,14 +574,18 @@ get_icd_data_dir <- function(must_work = TRUE) {
 
 .exists_anywhere <- function(var_name, fetch = FALSE) {
   ns <- asNamespace("icd")
-  if (.exists_in_lazy(var_name) ||
-    .exists_in_cache(var_name) ||
-    exists(var_name, ns)) {
-    return(TRUE)
-  }
-  if (fetch && exists(.get_fetcher_name(var_name), ns, mode = "function")) {
-    dat <- with_absent_action("silent", .get_fetcher_fun(var_name))
-    if (!is.null(dat) && is.data.frame(dat)) return(TRUE)
-  }
-  FALSE
+  vapply(var_name, function(v) {
+    r <- .exists_in_lazy(v) ||
+      .exists_in_cache(v) ||
+      exists(v, ns)
+    if (!r) {
+      if (fetch && exists(.get_fetcher_name(v), ns, mode = "function")) {
+        dat <- with_absent_action("silent", .get_fetcher_fun(v))
+        if (!is.null(dat) && is.data.frame(dat)) r <- TRUE
+      }
+    }
+    r
+  },
+  FUN.VALUE = logical(1)
+  )
 }

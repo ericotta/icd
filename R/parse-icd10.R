@@ -89,6 +89,10 @@
     sc_lookup <- .icd10_generate_subchap_lookup()
     mismatch_sub_chap <-
       dat$three_digit[which(dat$three_digit %nin% sc_lookup$sc_major)]
+    if (length(mismatch_sub_chap)) {
+      message("mismatched sub-chapters: ",
+              paste(mismatch_sub_chap, collapse = ", "))
+    }
     dat[["sub_chapter"]] <-
       merge(
         x = dat["three_digit"],
